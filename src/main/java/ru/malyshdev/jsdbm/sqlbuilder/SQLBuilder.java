@@ -112,9 +112,8 @@ public class SQLBuilder {
         return new SELECT(this);
     }
 
-    public INSERT INSERT(String... columns){
+    public INSERT INSERT(){
         sql.add("INSERT");
-        sql.add(Arrays.stream(columns).map(Object::toString).collect(Collectors.joining(", ")));
         return new INSERT(this);
     }
 

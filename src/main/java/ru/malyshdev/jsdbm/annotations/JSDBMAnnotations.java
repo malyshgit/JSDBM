@@ -19,6 +19,7 @@ public @interface JSDBMAnnotations {
     @Target(ElementType.FIELD)
     @interface Column {
         boolean primary_key() default false;
+        boolean not_null() default false;
         String column_name();
     }
 }
