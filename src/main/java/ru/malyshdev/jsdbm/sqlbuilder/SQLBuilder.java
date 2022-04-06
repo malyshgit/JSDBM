@@ -101,8 +101,8 @@ public class SQLBuilder {
             return builder.getSqlQuery();
         }
 
-        public ResultSet execute(){
-            return builder.execute();
+        public Integer execute(){
+            return builder.executeUpdate();
         }
     }
 
@@ -217,8 +217,8 @@ public class SQLBuilder {
             return builder.getSqlQuery();
         }
 
-        public ResultSet execute(){
-            return builder.execute();
+        public Integer execute(){
+            return builder.executeUpdate();
         }
 
     }
@@ -257,8 +257,8 @@ public class SQLBuilder {
             return builder.getSqlQuery();
         }
 
-        public ResultSet execute(){
-            return builder.execute();
+        public Integer execute(){
+            return builder.executeUpdate();
         }
 
     }
@@ -330,7 +330,7 @@ public class SQLBuilder {
         }
 
         public ResultSet execute(){
-            return builder.execute();
+            return builder.executeQuery();
         }
 
     }
@@ -362,8 +362,8 @@ public class SQLBuilder {
             return builder.getSqlQuery();
         }
 
-        public ResultSet execute(){
-            return builder.execute();
+        public Integer execute(){
+            return builder.executeUpdate();
         }
     }
 
@@ -401,13 +401,13 @@ public class SQLBuilder {
             return builder.getSqlQuery();
         }
 
-        public ResultSet execute(){
-            return builder.execute();
+        public Integer execute(){
+            return builder.executeUpdate();
         }
     }
 
 
-    public ResultSet execute(){
+    public ResultSet executeQuery(){
         try {
             var preparedStatement = connection.prepareStatement(String.join(" ", sql));
             for(var i = 1; i <= sql_values.size(); i++){
@@ -419,6 +419,20 @@ public class SQLBuilder {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public Integer executeUpdate(){
+        try {
+            var preparedStatement = connection.prepareStatement(String.join(" ", sql));
+            for(var i = 1; i <= sql_values.size(); i++){
+                var value = sql_values.get(i-1);
+                preparedStatement.setObject(i, value);
+            }
+            return preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 
 
