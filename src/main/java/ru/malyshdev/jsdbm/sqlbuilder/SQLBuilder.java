@@ -30,16 +30,197 @@ public class SQLBuilder {
         return new DROP(this);
     }
 
-    public SELECT SELECT(Object... columns){
+    public DELETE DELETE(){
+        sql.add("DELETE");
+        return new DELETE(this);
+    }
+
+    public static class DELETE{
+
+        SQLBuilder builder;
+
+        public DELETE(SQLBuilder builder){
+            this.builder = builder;
+        }
+
+        public DELETE FROM(String table_name){
+            builder.sql.add("FROM");
+            builder.sql.add(table_name);
+            return this;
+        }
+
+        public DELETE WHERE(String condition){
+            builder.sql.add("WHERE");
+            builder.sql.add(condition);
+            return this;
+        }
+
+        public DELETE AND(String condition){
+            builder.sql.add("AND");
+            builder.sql.add(condition);
+            return this;
+        }
+
+        public DELETE OR(String condition){
+            builder.sql.add("OR");
+            builder.sql.add(condition);
+            return this;
+        }
+
+        public DELETE NOT(String condition){
+            builder.sql.add("NOT");
+            builder.sql.add(condition);
+            return this;
+        }
+
+        public DELETE NOT_LIKE(String condition){
+            builder.sql.add("NOT LIKE");
+            builder.sql.add(condition);
+            return this;
+        }
+
+        public DELETE BETWEEN(String condition){
+            builder.sql.add("BETWEEN");
+            builder.sql.add(condition);
+            return this;
+        }
+
+        public DELETE IS(String condition){
+            builder.sql.add("IS");
+            builder.sql.add(condition);
+            return this;
+        }
+
+        public DELETE IN(String condition){
+            builder.sql.add("IN");
+            builder.sql.add(condition);
+            return this;
+        }
+
+        public String getSqlQuery(){
+            return builder.getSqlQuery();
+        }
+
+        public ResultSet execute(){
+            return builder.execute();
+        }
+    }
+
+    public SELECT SELECT(String... columns){
         sql.add("SELECT");
         sql.add(Arrays.stream(columns).map(Object::toString).collect(Collectors.joining(", ")));
         return new SELECT(this);
     }
 
-    public INSERT INSERT(Object... columns){
+    public INSERT INSERT(String... columns){
         sql.add("INSERT");
         sql.add(Arrays.stream(columns).map(Object::toString).collect(Collectors.joining(", ")));
         return new INSERT(this);
+    }
+
+    public UPDATE UPDATE(String table_name){
+        sql.add("UPDATE");
+        sql.add(table_name);
+        return new UPDATE(this);
+    }
+
+    public static class UPDATE{
+
+        SQLBuilder builder;
+
+        public UPDATE(SQLBuilder builder){
+            this.builder = builder;
+        }
+
+        public UPDATE AND_SET(String column, String value){
+            builder.sql.add(", ");
+            builder.sql.add(column);
+            builder.sql.add("=");
+            builder.sql.add(value);
+            return this;
+        }
+
+        public UPDATE SET(String column, String value){
+            builder.sql.add("SET");
+            builder.sql.add(column);
+            builder.sql.add("=");
+            builder.sql.add(value);
+            return this;
+        }
+
+        public UPDATE AND_SET(String column, Object value){
+            builder.sql.add(",");
+            builder.sql.add(column);
+            builder.sql.add("=?");
+            builder.sql_values.add(value);
+            return this;
+        }
+
+
+        public UPDATE SET(String column, Object value){
+            builder.sql.add("SET");
+            builder.sql.add(column);
+            builder.sql.add("=?");
+            builder.sql_values.add(value);
+            return this;
+        }
+
+        public UPDATE WHERE(String condition){
+            builder.sql.add("WHERE");
+            builder.sql.add(condition);
+            return this;
+        }
+
+        public UPDATE AND(String condition){
+            builder.sql.add("AND");
+            builder.sql.add(condition);
+            return this;
+        }
+
+        public UPDATE OR(String condition){
+            builder.sql.add("OR");
+            builder.sql.add(condition);
+            return this;
+        }
+
+        public UPDATE NOT(String condition){
+            builder.sql.add("NOT");
+            builder.sql.add(condition);
+            return this;
+        }
+
+        public UPDATE NOT_LIKE(String condition){
+            builder.sql.add("NOT LIKE");
+            builder.sql.add(condition);
+            return this;
+        }
+
+        public UPDATE BETWEEN(String condition){
+            builder.sql.add("BETWEEN");
+            builder.sql.add(condition);
+            return this;
+        }
+
+        public UPDATE IS(String condition){
+            builder.sql.add("IS");
+            builder.sql.add(condition);
+            return this;
+        }
+
+        public UPDATE IN(String condition){
+            builder.sql.add("IN");
+            builder.sql.add(condition);
+            return this;
+        }
+
+        public String getSqlQuery(){
+            return builder.getSqlQuery();
+        }
+
+        public ResultSet execute(){
+            return builder.execute();
+        }
+
     }
 
     public static class INSERT{
@@ -50,43 +231,34 @@ public class SQLBuilder {
             this.builder = builder;
         }
 
-        public INTO INTO(String table_name){
+        public INSERT INTO(String table_name){
             builder.sql.add("INTO");
             builder.sql.add(table_name);
-            return new INTO(builder);
+            return this;
         }
 
-        public static class INTO{
+        public INSERT COLUMNS(String... columns){
+            builder.sql.add("(");
+            builder.sql.add(String.join(", ", columns));
+            builder.sql.add(")");
+            return this;
+        }
 
-            SQLBuilder builder;
+        public INSERT VALUES(Object... values){
+            builder.sql.add("VALUES");
+            builder.sql.add("(");
+            builder.sql.add(Arrays.stream(values).map(v->"?").collect(Collectors.joining(", ")));
+            builder.sql_values.addAll(Arrays.stream(values).toList());
+            builder.sql.add(")");
+            return this;
+        }
 
-            public INTO(SQLBuilder builder){
-                this.builder = builder;
-            }
+        public String getSqlQuery(){
+            return builder.getSqlQuery();
+        }
 
-            public INTO COLUMNS(String... columns){
-                builder.sql.add("(");
-                builder.sql.add(String.join(", ", columns));
-                builder.sql.add(")");
-                return this;
-            }
-
-            public INTO VALUES(Object... values){
-                builder.sql.add("VALUES");
-                builder.sql.add("(");
-                builder.sql.add(Arrays.stream(values).map(v->"?").collect(Collectors.joining(", ")));
-                builder.sql_values.addAll(Arrays.stream(values).toList());
-                builder.sql.add(")");
-                return this;
-            }
-
-            public String getSqlQuery(){
-                return builder.getSqlQuery();
-            }
-
-            public ResultSet execute(){
-                return builder.execute();
-            }
+        public ResultSet execute(){
+            return builder.execute();
         }
 
     }
@@ -99,94 +271,66 @@ public class SQLBuilder {
             this.builder = builder;
         }
 
-        public FROM FROM(Object... tables){
+        public SELECT FROM(Object... tables){
             builder.sql.add("FROM");
             builder.sql.add(Arrays.stream(tables).map(Object::toString).collect(Collectors.joining(", ")));
-            return new FROM(builder);
+            return this;
         }
 
-        public static class FROM{
+        public SELECT WHERE(String condition){
+            builder.sql.add("WHERE");
+            builder.sql.add(condition);
+            return this;
+        }
 
-            SQLBuilder builder;
+        public SELECT AND(String condition){
+            builder.sql.add("AND");
+            builder.sql.add(condition);
+            return this;
+        }
 
-            public FROM(SQLBuilder builder){
-                this.builder = builder;
-            }
+        public SELECT OR(String condition){
+            builder.sql.add("OR");
+            builder.sql.add(condition);
+            return this;
+        }
 
-            public WHERE WHERE(String condition){
-                builder.sql.add("WHERE");
-                builder.sql.add(condition);
-                return new WHERE(builder);
-            }
+        public SELECT NOT(String condition){
+            builder.sql.add("NOT");
+            builder.sql.add(condition);
+            return this;
+        }
 
-            public String getSqlQuery(){
-                return builder.getSqlQuery();
-            }
+        public SELECT NOT_LIKE(String condition){
+            builder.sql.add("NOT LIKE");
+            builder.sql.add(condition);
+            return this;
+        }
 
-            public ResultSet execute(){
-                return builder.execute();
-            }
+        public SELECT BETWEEN(String condition){
+            builder.sql.add("BETWEEN");
+            builder.sql.add(condition);
+            return this;
+        }
 
-            public static class WHERE{
+        public SELECT IS(String condition){
+            builder.sql.add("IS");
+            builder.sql.add(condition);
+            return this;
+        }
 
-                SQLBuilder builder;
+        public SELECT IN(String condition){
+            builder.sql.add("IN");
+            builder.sql.add(condition);
+            return this;
+        }
 
-                public WHERE(SQLBuilder builder){
-                    this.builder = builder;
-                }
+        public String getSqlQuery(){
+            return builder.getSqlQuery();
+        }
 
-                public WHERE AND(String condition){
-                    builder.sql.add("AND");
-                    builder.sql.add(condition);
-                    return new WHERE(builder);
-                }
-
-                public WHERE OR(String condition){
-                    builder.sql.add("OR");
-                    builder.sql.add(condition);
-                    return new WHERE(builder);
-                }
-
-                public WHERE NOT(String condition){
-                    builder.sql.add("NOT");
-                    builder.sql.add(condition);
-                    return new WHERE(builder);
-                }
-
-                public WHERE NOT_LIKE(String condition){
-                    builder.sql.add("NOT LIKE");
-                    builder.sql.add(condition);
-                    return new WHERE(builder);
-                }
-
-                public WHERE BETWEEN(String condition){
-                    builder.sql.add("BETWEEN");
-                    builder.sql.add(condition);
-                    return new WHERE(builder);
-                }
-
-                public WHERE IS(String condition){
-                    builder.sql.add("IS");
-                    builder.sql.add(condition);
-                    return new WHERE(builder);
-                }
-
-                public WHERE IN(String condition){
-                    builder.sql.add("IN");
-                    builder.sql.add(condition);
-                    return new WHERE(builder);
-                }
-
-                public String getSqlQuery(){
-                    return builder.getSqlQuery();
-                }
-
-                public ResultSet execute(){
-                    return builder.execute();
-                }
-
-            }
-
+        public ResultSet execute(){
+            return builder.execute();
         }
 
     }
@@ -199,37 +343,27 @@ public class SQLBuilder {
             this.builder = builder;
         }
 
-        public TABLE TABLE(){
+        public DROP TABLE(){
             builder.sql.add("TABLE");
-            return new TABLE(builder);
+            return this;
         }
 
-        public static class TABLE {
+        public DROP IF_EXISTS(){
+            if(builder.sql.size() == 2) builder.sql.add("IF EXISTS");
+            return this;
+        }
 
-            SQLBuilder builder;
+        public DROP NAME(String table_name){
+            builder.sql.add(table_name);
+            return this;
+        }
 
-            public TABLE(SQLBuilder builder){
-                this.builder = builder;
-            }
+        public String getSqlQuery(){
+            return builder.getSqlQuery();
+        }
 
-            public TABLE IF_EXISTS(){
-                if(builder.sql.size() == 2) builder.sql.add("IF EXISTS");
-                return this;
-            }
-
-            public TABLE NAME(String table_name){
-                builder.sql.add(table_name);
-                return this;
-            }
-
-            public String getSqlQuery(){
-                return builder.getSqlQuery();
-            }
-
-            public ResultSet execute(){
-                return builder.execute();
-            }
-
+        public ResultSet execute(){
+            return builder.execute();
         }
     }
 
@@ -241,44 +375,34 @@ public class SQLBuilder {
             this.builder = builder;
         }
 
-        public TABLE TABLE(){
+        public CREATE TABLE(){
             builder.sql.add("TABLE");
-            return new TABLE(builder);
+            return this;
         }
 
-        public static class TABLE {
+        public CREATE IF_NOT_EXISTS(){
+            if(builder.sql.size() == 2) builder.sql.add("IF NOT EXISTS");
+            return this;
+        }
 
-            SQLBuilder builder;
+        public CREATE NAME(String table_name){
+            builder.sql.add(table_name);
+            return this;
+        }
 
-            public TABLE(SQLBuilder builder){
-                this.builder = builder;
-            }
+        public CREATE COLUMNS(Map<String, String> columns){
+            builder.sql.add("(");
+            builder.sql.add(columns.entrySet().stream().map(e->e.getKey()+" "+e.getValue()).collect(Collectors.joining(", ")));
+            builder.sql.add(")");
+            return this;
+        }
 
-            public TABLE IF_NOT_EXISTS(){
-                if(builder.sql.size() == 2) builder.sql.add("IF NOT EXISTS");
-                return this;
-            }
+        public String getSqlQuery(){
+            return builder.getSqlQuery();
+        }
 
-            public TABLE NAME(String table_name){
-                builder.sql.add(table_name);
-                return this;
-            }
-
-            public TABLE COLUMNS(Map<String, String> columns){
-                builder.sql.add("(");
-                builder.sql.add(columns.entrySet().stream().map(e->e.getKey()+" "+e.getValue()).collect(Collectors.joining(", ")));
-                builder.sql.add(")");
-                return this;
-            }
-
-            public String getSqlQuery(){
-                return builder.getSqlQuery();
-            }
-
-            public ResultSet execute(){
-                return builder.execute();
-            }
-
+        public ResultSet execute(){
+            return builder.execute();
         }
     }
 
