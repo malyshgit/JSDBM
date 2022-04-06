@@ -30,7 +30,7 @@ public abstract class Table<E> {
             var result = new SQLBuilder(dataBase.getConnection())
                     .SELECT("*")
                     .FROM(table_name)
-                    .request();
+                    .execute();
 
             var entry_class = Class.forName((((ParameterizedType) this.getClass()
                     .getGenericSuperclass()).getActualTypeArguments()[0]).getTypeName()).getDeclaredConstructors()[0];
