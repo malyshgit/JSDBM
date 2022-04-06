@@ -71,10 +71,11 @@ public class SQLBuilder {
                 return this;
             }
 
-            public INTO VALUES(String... values){
+            public INTO VALUES(Object... values){
                 builder.sql.add("VALUES");
                 builder.sql.add("(");
-                builder.sql.add(String.join(", ", values));
+                builder.sql.add(Arrays.stream(values).map(v->"?").collect(Collectors.joining(", ")));
+                builder.sql_values.addAll(Arrays.stream(values).toList());
                 builder.sql.add(")");
                 return this;
             }
