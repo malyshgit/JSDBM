@@ -264,6 +264,13 @@ public class SQLBuilder {
                 return this;
             }
 
+            public TABLE COLUMNS(Map<String, String> columns){
+                builder.sql.add("(");
+                builder.sql.add(columns.entrySet().stream().map(e->e.getKey()+" "+e.getValue()).collect(Collectors.joining(", ")));
+                builder.sql.add(")");
+                return this;
+            }
+
             public String getSqlQuery(){
                 return builder.getSqlQuery();
             }
