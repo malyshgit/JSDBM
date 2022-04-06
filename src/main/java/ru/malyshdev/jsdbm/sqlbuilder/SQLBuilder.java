@@ -217,6 +217,11 @@ public class SQLBuilder {
                 return this;
             }
 
+            public TABLE NAME(String table_name){
+                builder.sql.add(table_name);
+                return this;
+            }
+
             public String getSqlQuery(){
                 return builder.getSqlQuery();
             }
