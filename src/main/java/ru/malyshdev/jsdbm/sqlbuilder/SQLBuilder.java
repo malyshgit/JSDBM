@@ -11,146 +11,108 @@ public class SQLBuilder {
 
     protected Connection connection;
     protected List<String> sql;
-    protected List<Object> values;
+    protected List<Object> sql_values;
 
     public SQLBuilder(Connection connection){
         sql = new ArrayList<>();
-        values = new ArrayList<>();
+        sql_values = new ArrayList<>();
         this.connection = connection;
     }
 
-    public CREATE CREATE(){
+    public SQLBuilder CREATE(){
         sql.add("CREATE");
-        return new CREATE(this);
+        return this;
     }
 
-    public DROP DROP(){
+    public SQLBuilder DROP(){
         sql.add("DROP");
-        return new DROP(this);
+        return this;
     }
 
-    public SELECT SELECT(Object... columns){
+    public SQLBuilder SELECT(Object... columns){
         sql.add("SELECT");
         sql.add(Arrays.stream(columns).map(Object::toString).collect(Collectors.joining(", ")));
-        return new SELECT(this);
+        return this;
     }
 
-    public static class SELECT{
-
-        protected SQLBuilder builder;
-
-        public SELECT(SQLBuilder builder){
-            this.builder = builder;
-        }
-
-        public FROM FROM(Object... tables){
-            builder.sql.add("FROM");
-            builder.sql.add(Arrays.stream(tables).map(Object::toString).collect(Collectors.joining(", ")));
-            return new FROM(builder);
-        }
+    public SQLBuilder INSERT(){
+        sql.add("INSERT");
+        return this;
     }
 
-    public static class FROM{
+    public SQLBuilder FROM(Object... tables){
+        sql.add("FROM");
+        sql.add(Arrays.stream(tables).map(Object::toString).collect(Collectors.joining(", ")));
+        return this;
+    }
 
-        protected SQLBuilder builder;
+    public SQLBuilder INTO(String table_name){
+        sql.add("INTO");
+        sql.add(table_name);
+        return this;
+    }
 
-        public FROM(SQLBuilder builder){
-            this.builder = builder;
-        }
+    public SQLBuilder COLUMNS(String... columns){
+        sql.add("(");
+        sql.add(String.join(", ", columns));
+        sql.add(")");
+        return this;
+    }
 
-        public ResultSet request(){
-            try {
-                var preparedStatement = builder.connection.prepareStatement(String.join(" ", builder.sql));
-                for(var i = 1; i <= builder.values.size(); i++){
-                    var value = builder.values.get(i-1);
-                    preparedStatement.setObject(i, value);
-                }
-                return preparedStatement.executeQuery();
-            } catch (SQLException e) {
-                e.printStackTrace();
+    public SQLBuilder VALUES(Object... values){
+        sql.add("VALUES (");
+        sql.add(Arrays.stream(values).map(v-> "?").collect(Collectors.joining(", ")));
+        sql_values.addAll(Arrays.stream(values).toList());
+        sql.add(")");
+        return this;
+    }
+
+    public ResultSet request(){
+        try {
+            var preparedStatement = connection.prepareStatement(String.join(" ", sql));
+            for(var i = 1; i <= sql_values.size(); i++){
+                var value = sql_values.get(i-1);
+                preparedStatement.setObject(i, value);
             }
-            return null;
+            return preparedStatement.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return null;
     }
 
 
-    public static class CREATE {
-
-        protected SQLBuilder builder;
-
-        public CREATE(SQLBuilder builder) {
-            this.builder = builder;
-        }
-
-        public TABLE TABLE(){
-            builder.sql.add("TABLE");
-            return new TABLE(builder);
-        }
+    public SQLBuilder TABLE(){
+        sql.add("TABLE");
+        return this;
     }
 
-    public static class DROP {
-
-        protected SQLBuilder builder;
-
-        public DROP(SQLBuilder builder) {
-            this.builder = builder;
-        }
-
-        public TABLE TABLE(){
-            builder.sql.add("TABLE");
-            return new TABLE(builder);
-        }
+    public SQLBuilder NAME(String table_name){
+        sql.add(table_name);
+        return this;
     }
 
-    public static class TABLE {
+    public SQLBuilder IF_NOT_EXISTS(){
+        sql.add("IF NOT EXISTS");
+        return this;
+    }
 
-        protected SQLBuilder builder;
+    public SQLBuilder IF_EXISTS(){
+        sql.add("IF EXISTS");
+        return this;
+    }
 
-        public TABLE(SQLBuilder builder) {
-            this.builder = builder;
-        }
+    public SQLBuilder COLUMNS(String[]... columns){
+        sql.add("(");
+        sql.add(Arrays.stream(columns).map(o -> o[0] + " "+ o[1].toUpperCase()).collect(Collectors.joining(", ")));
+        sql.add(")");
+        return this;
+    }
 
-        public TABLE NAME(String table_name){
-            builder.sql.add(table_name);
-            return this;
-        }
-
-        public TABLE IF_NOT_EXISTS(){
-            builder.sql.add("IF NOT EXISTS");
-            return this;
-        }
-
-        public TABLE IF_EXISTS(){
-            builder.sql.add("IF EXISTS");
-            return this;
-        }
-
-        public TABLE COLUMNS(String[]... columns){
-            builder.sql.add("(");
-            builder.sql.add(Arrays.stream(columns).map(o -> o[0] + " "+ o[1].toUpperCase()).collect(Collectors.joining(", ")));
-            builder.sql.add(")");
-            return this;
-        }
-
-        public TABLE COLUMNS(Map<String, String> columns){
-            builder.sql.add("(");
-            builder.sql.add(columns.entrySet().stream().map(e -> e.getKey() + " "+e.getValue()).collect(Collectors.joining(", ")));
-            builder.sql.add(")");
-            return this;
-        }
-
-        public ResultSet request(){
-            try {
-                var preparedStatement = builder.connection.prepareStatement(String.join(" ", builder.sql));
-                for(var i = 1; i <= builder.values.size(); i++){
-                    var value = builder.values.get(i-1);
-                    preparedStatement.setObject(i, value);
-                }
-                return preparedStatement.executeQuery();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
+    public SQLBuilder COLUMNS(Map<String, String> columns){
+        sql.add("(");
+        sql.add(columns.entrySet().stream().map(e -> e.getKey() + " "+e.getValue()).collect(Collectors.joining(", ")));
+        sql.add(")");
+        return this;
     }
 }
