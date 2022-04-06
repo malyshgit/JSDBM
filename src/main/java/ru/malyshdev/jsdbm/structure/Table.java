@@ -5,8 +5,13 @@ import ru.malyshdev.jsdbm.sqlbuilder.SQLBuilder;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
+import java.sql.Array;
+import java.sql.JDBCType;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.stream.Collectors;
 
 public abstract class Table<E> {
 
@@ -42,7 +47,12 @@ public abstract class Table<E> {
                     var annotation = field.getAnnotation(JSDBMAnnotations.Column.class);
                     if (annotation != null) {
                         var column_name = annotation.column_name();
-                        var value = result.getObject(column_name, field.getType());
+                        Object value;
+                        if(result.getObject(column_name) instanceof Array){
+                            value = Arrays.stream(((Object[])result.getArray(column_name).getArray())).collect(Collectors.toList());
+                        }else{
+                            value = result.getObject(column_name, field.getType());
+                        }
                         field.setAccessible(true);
                         field.set(entry_instance, value);
                         field.setAccessible(false);
