@@ -1,15 +1,16 @@
 package ru.malyshdev.jsdbm.structure;
 
-import ru.malyshdev.jsdbm.annotations.JSDBMAnnotations;
+import ru.malyshdev.jsdbm.annotations.JSDBMColumn;
+import ru.malyshdev.jsdbm.annotations.JSDBMTable;
 import ru.malyshdev.jsdbm.sqlbuilder.SQLBuilder;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.sql.Array;
 import java.sql.JDBCType;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
@@ -21,7 +22,13 @@ public abstract class Table<E> {
 
     public Table(){
         entry_list = new ConcurrentLinkedQueue<>();
-        var table_class = this.getClass().getAnnotation(JSDBMAnnotations.Table.class);
+        var table_class = this.getClass().getAnnotation(JSDBMTable.class);
+        this.table_name = table_class.table_name();
+    }
+
+    public Table(String table_name, Map<String, JDBCType> columns){
+        entry_list = new ConcurrentLinkedQueue<>();
+        var table_class = this.getClass().getAnnotation(JSDBMTable.class);
         this.table_name = table_class.table_name();
     }
 
@@ -32,10 +39,10 @@ public abstract class Table<E> {
     protected void link(ru.malyshdev.jsdbm.structure.DataBase dataBase){
         this.dataBase = dataBase;
         try {
-            var result = new SQLBuilder(dataBase.getConnection())
+            var result = new SQLBuilder()
                     .SELECT("*")
                     .FROM(table_name)
-                    .execute();
+                    .execute(dataBase.getConnection());
 
             var entry_class = Class.forName((((ParameterizedType) this.getClass()
                     .getGenericSuperclass()).getActualTypeArguments()[0]).getTypeName()).getDeclaredConstructors()[0];
@@ -44,7 +51,7 @@ public abstract class Table<E> {
                 var entry_instance = entry_class.newInstance();
                 var fields = entry_instance.getClass().getDeclaredFields();
                 for (var field : fields) {
-                    var annotation = field.getAnnotation(JSDBMAnnotations.Column.class);
+                    var annotation = field.getAnnotation(JSDBMColumn.class);
                     if (annotation != null) {
                         var column_name = annotation.column_name();
                         Object value;
