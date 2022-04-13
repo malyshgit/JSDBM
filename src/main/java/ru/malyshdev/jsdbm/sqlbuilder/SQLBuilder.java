@@ -257,10 +257,7 @@ public class SQLBuilder {
             builder.sql.append(" ");
             builder.sql.append("VALUES");
             builder.sql.append("(");
-            builder.sql.append(Arrays.stream(values).map(o -> {
-                System.out.println(o);
-                return o.toString();
-            }).collect(Collectors.joining(", ")));
+            builder.sql.append(Arrays.stream(values).map(Object::toString).collect(Collectors.joining(", ")));
             builder.sql.append(")");
             return this;
         }
