@@ -151,7 +151,7 @@ public class SQLBuilder {
             builder.sql.append(" ");
             builder.sql.append("SET");
             builder.sql.append(" ");
-            builder.sql.append(columns_and_values.entrySet().stream().map(e->e.getKey()+"="+(e.getValue() instanceof WithoutQuotes ? e.getValue().toString() : "'"+e.getValue().toString()+"'")).collect(Collectors.joining(", ")));
+            builder.sql.append(columns_and_values.entrySet().stream().map(e->e.getKey()+"="+e.getValue()).collect(Collectors.joining(", ")));
             return this;
         }
 
@@ -257,7 +257,7 @@ public class SQLBuilder {
             builder.sql.append(" ");
             builder.sql.append("VALUES");
             builder.sql.append("(");
-            builder.sql.append(Arrays.stream(values).map(o-> o instanceof WithoutQuotes ? o.toString() : "'"+o.toString()+"'").collect(Collectors.joining(", ")));
+            builder.sql.append(Arrays.stream(values).map(Object::toString).collect(Collectors.joining(", ")));
             builder.sql.append(")");
             return this;
         }
