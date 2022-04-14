@@ -151,7 +151,7 @@ public class SQLBuilder {
             builder.sql.append(" ");
             builder.sql.append("SET");
             builder.sql.append(" ");
-            builder.sql.append(columns_and_values.entrySet().stream().map(e->e.getKey()+"="+e.getValue()).collect(Collectors.joining(", ")));
+            builder.sql.append(columns_and_values.entrySet().stream().map(e->e.getKey()+"="+(e.getValue() instanceof WithoutQuotes ? e.getValue().toString() : "'"+e.getValue().toString()+"'")).collect(Collectors.joining(", ")));
             return this;
         }
 
@@ -257,7 +257,7 @@ public class SQLBuilder {
             builder.sql.append(" ");
             builder.sql.append("VALUES");
             builder.sql.append("(");
-            builder.sql.append(Arrays.stream(values).map(Object::toString).collect(Collectors.joining(", ")));
+            builder.sql.append(Arrays.stream(values).map(o-> o instanceof WithoutQuotes ? o.toString() : "'"+o.toString()+"'").collect(Collectors.joining(", ")));
             builder.sql.append(")");
             return this;
         }
@@ -444,10 +444,6 @@ public class SQLBuilder {
     public ResultSet executeQuery(Connection connection){
         try {
             var preparedStatement = connection.prepareStatement(sql.toString());
-            /*for(var i = 1; i <= values.size(); i++){
-                var value = values.get(i-1);
-                preparedStatement.setObject(i, value);
-            }*/
             return preparedStatement.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -458,10 +454,6 @@ public class SQLBuilder {
     public Integer executeUpdate(Connection connection){
         try {
             var preparedStatement = connection.prepareStatement(sql.toString());
-            /*for(var i = 1; i <= values.size(); i++){
-                var value = values.get(i-1);
-                preparedStatement.setObject(i, value);
-            }*/
             return preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
