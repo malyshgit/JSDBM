@@ -16,6 +16,11 @@ public class SQLBuilder {
         sql = new StringBuilder();
     }
 
+    public SQLBuilder SQL(String sql_string){
+        sql.append(sql_string);
+        return this;
+    }
+
     public CREATE CREATE(){
         sql.append("CREATE");
         return new CREATE(this);
