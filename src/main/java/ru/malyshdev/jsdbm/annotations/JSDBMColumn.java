@@ -71,8 +71,7 @@ public @interface JSDBMColumn {
 
         public static Class<?> getDataClass(DataType dataType){
             return switch (dataType){
-                case CHAR -> String.class;
-                case STRING -> String.class;
+                case CHAR, STRING -> String.class;
                 case BIGDECIMAL -> BigDecimal.class;
                 case BOOLEAN -> Boolean.class;
                 case BYTE -> Byte.class;
