@@ -71,6 +71,18 @@ public class TripleMap<X,Y,Z> {
         public void setValue2(Z value2) {
             this.value2 = value2;
         }
+
+        public boolean hasKey(){
+            return key != null;
+        }
+
+        public boolean hasValue1(){
+            return value1 != null;
+        }
+
+        public boolean hasValue2(){
+            return value2 != null;
+        }
     }
 
 }

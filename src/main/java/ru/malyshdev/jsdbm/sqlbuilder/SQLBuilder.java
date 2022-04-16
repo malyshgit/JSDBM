@@ -2,18 +2,17 @@ package ru.malyshdev.jsdbm.sqlbuilder;
 
 import javax.print.attribute.standard.MediaSize;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class SQLBuilder {
 
     protected StringBuilder sql;
+    protected LinkedList<Object> sql_values;
 
     public SQLBuilder(){
         sql = new StringBuilder();
+        sql_values = new LinkedList<>();
     }
 
     public SQLBuilder SQL(String sql_string){
@@ -52,67 +51,123 @@ public class SQLBuilder {
             return this;
         }
 
-        public DELETE WHERE(String condition){
+        public DELETE WHERE(TripleMap.TripleEntry<String, String, Object> condition){
             builder.sql.append(" ");
             builder.sql.append("WHERE");
             builder.sql.append(" ");
-            builder.sql.append(condition);
+            builder.sql.append(condition.getKey());
+            if(condition.hasValue1()){
+                builder.sql.append("=");
+            }
+            if(condition.hasValue2()){
+                builder.sql.append("?");
+                builder.sql_values.add(condition.getValue2());
+            }
             return this;
         }
 
-        public DELETE AND(String condition){
+        public DELETE AND(TripleMap.TripleEntry<String, String, Object> condition){
             builder.sql.append(" ");
             builder.sql.append("AND");
             builder.sql.append(" ");
-            builder.sql.append(condition);
+            builder.sql.append(condition.getKey());
+            if(condition.hasValue1()){
+                builder.sql.append("=");
+            }
+            if(condition.hasValue2()){
+                builder.sql.append("?");
+                builder.sql_values.add(condition.getValue2());
+            }
             return this;
         }
 
-        public DELETE OR(String condition){
+        public DELETE OR(TripleMap.TripleEntry<String, String, Object> condition){
             builder.sql.append(" ");
             builder.sql.append("OR");
             builder.sql.append(" ");
-            builder.sql.append(condition);
+            builder.sql.append(condition.getKey());
+            if(condition.hasValue1()){
+                builder.sql.append("=");
+            }
+            if(condition.hasValue2()){
+                builder.sql.append("?");
+                builder.sql_values.add(condition.getValue2());
+            }
             return this;
         }
 
-        public DELETE NOT(String condition){
+        public DELETE NOT(TripleMap.TripleEntry<String, String, Object> condition){
             builder.sql.append(" ");
             builder.sql.append("NOT");
             builder.sql.append(" ");
-            builder.sql.append(condition);
+            builder.sql.append(condition.getKey());
+            if(condition.hasValue1()){
+                builder.sql.append("=");
+            }
+            if(condition.hasValue2()){
+                builder.sql.append("?");
+                builder.sql_values.add(condition.getValue2());
+            }
             return this;
         }
 
-        public DELETE NOT_LIKE(String condition){
+        public DELETE NOT_LIKE(TripleMap.TripleEntry<String, String, Object> condition){
             builder.sql.append(" ");
             builder.sql.append("NOT LIKE");
             builder.sql.append(" ");
-            builder.sql.append(condition);
+            builder.sql.append(condition.getKey());
+            if(condition.hasValue1()){
+                builder.sql.append("=");
+            }
+            if(condition.hasValue2()){
+                builder.sql.append("?");
+                builder.sql_values.add(condition.getValue2());
+            }
             return this;
         }
 
-        public DELETE BETWEEN(String condition){
+        public DELETE BETWEEN(TripleMap.TripleEntry<String, String, Object> condition){
             builder.sql.append(" ");
             builder.sql.append("BETWEEN");
             builder.sql.append(" ");
-            builder.sql.append(condition);
+            builder.sql.append(condition.getKey());
+            if(condition.hasValue1()){
+                builder.sql.append("=");
+            }
+            if(condition.hasValue2()){
+                builder.sql.append("?");
+                builder.sql_values.add(condition.getValue2());
+            }
             return this;
         }
 
-        public DELETE IS(String condition){
+        public DELETE IS(TripleMap.TripleEntry<String, String, Object> condition){
             builder.sql.append(" ");
             builder.sql.append("IS");
             builder.sql.append(" ");
-            builder.sql.append(condition);
+            builder.sql.append(condition.getKey());
+            if(condition.hasValue1()){
+                builder.sql.append("=");
+            }
+            if(condition.hasValue2()){
+                builder.sql.append("?");
+                builder.sql_values.add(condition.getValue2());
+            }
             return this;
         }
 
-        public DELETE IN(String condition){
+        public DELETE IN(TripleMap.TripleEntry<String, String, Object> condition){
             builder.sql.append(" ");
             builder.sql.append("IN");
             builder.sql.append(" ");
-            builder.sql.append(condition);
+            builder.sql.append(condition.getKey());
+            if(condition.hasValue1()){
+                builder.sql.append("=");
+            }
+            if(condition.hasValue2()){
+                builder.sql.append("?");
+                builder.sql_values.add(condition.getValue2());
+            }
             return this;
         }
 
@@ -152,75 +207,140 @@ public class SQLBuilder {
             this.builder = builder;
         }
 
-        public UPDATE SET(Map<String, Object> columns_and_values){
+        public UPDATE SET(TripleMap<String, String, Object> columns_and_values){
             builder.sql.append(" ");
             builder.sql.append("SET");
             builder.sql.append(" ");
-            builder.sql.append(columns_and_values.entrySet().stream().map(e->e.getKey()+"="+e.getValue()).collect(Collectors.joining(", ")));
+            for(var cv : columns_and_values.getEntryList()){
+                builder.sql.append(cv.getKey());
+                if(cv.hasValue1()){
+                    builder.sql.append("=");
+                }
+                if(cv.hasValue2()){
+                    builder.sql.append("?");
+                    builder.sql_values.add(cv.getValue2());
+                }
+            };
             return this;
         }
 
-        public UPDATE WHERE(String condition){
+        public UPDATE WHERE(TripleMap.TripleEntry<String, String, Object> condition){
             builder.sql.append(" ");
             builder.sql.append("WHERE");
             builder.sql.append(" ");
-            builder.sql.append(condition);
+            builder.sql.append(condition.getKey());
+            if(condition.hasValue1()){
+                builder.sql.append("=");
+            }
+            if(condition.hasValue2()){
+                builder.sql.append("?");
+                builder.sql_values.add(condition.getValue2());
+            }
             return this;
         }
 
-        public UPDATE AND(String condition){
+        public UPDATE AND(TripleMap.TripleEntry<String, String, Object> condition){
             builder.sql.append(" ");
             builder.sql.append("AND");
             builder.sql.append(" ");
-            builder.sql.append(condition);
+            builder.sql.append(condition.getKey());
+            if(condition.hasValue1()){
+                builder.sql.append("=");
+            }
+            if(condition.hasValue2()){
+                builder.sql.append("?");
+                builder.sql_values.add(condition.getValue2());
+            }
             return this;
         }
 
-        public UPDATE OR(String condition){
+        public UPDATE OR(TripleMap.TripleEntry<String, String, Object> condition){
             builder.sql.append(" ");
             builder.sql.append("OR");
             builder.sql.append(" ");
-            builder.sql.append(condition);
+            builder.sql.append(condition.getKey());
+            if(condition.hasValue1()){
+                builder.sql.append("=");
+            }
+            if(condition.hasValue2()){
+                builder.sql.append("?");
+                builder.sql_values.add(condition.getValue2());
+            }
             return this;
         }
 
-        public UPDATE NOT(String condition){
+        public UPDATE NOT(TripleMap.TripleEntry<String, String, Object> condition){
             builder.sql.append(" ");
             builder.sql.append("NOT");
             builder.sql.append(" ");
-            builder.sql.append(condition);
+            builder.sql.append(condition.getKey());
+            if(condition.hasValue1()){
+                builder.sql.append("=");
+            }
+            if(condition.hasValue2()){
+                builder.sql.append("?");
+                builder.sql_values.add(condition.getValue2());
+            }
             return this;
         }
 
-        public UPDATE NOT_LIKE(String condition){
+        public UPDATE NOT_LIKE(TripleMap.TripleEntry<String, String, Object> condition){
             builder.sql.append(" ");
             builder.sql.append("NOT LIKE");
             builder.sql.append(" ");
-            builder.sql.append(condition);
+            builder.sql.append(condition.getKey());
+            if(condition.hasValue1()){
+                builder.sql.append("=");
+            }
+            if(condition.hasValue2()){
+                builder.sql.append("?");
+                builder.sql_values.add(condition.getValue2());
+            }
             return this;
         }
 
-        public UPDATE BETWEEN(String condition){
+        public UPDATE BETWEEN(TripleMap.TripleEntry<String, String, Object> condition){
             builder.sql.append(" ");
             builder.sql.append("BETWEEN");
             builder.sql.append(" ");
-            builder.sql.append(condition);
+            builder.sql.append(condition.getKey());
+            if(condition.hasValue1()){
+                builder.sql.append("=");
+            }
+            if(condition.hasValue2()){
+                builder.sql.append("?");
+                builder.sql_values.add(condition.getValue2());
+            }
             return this;
         }
 
-        public UPDATE IS(String condition){
+        public UPDATE IS(TripleMap.TripleEntry<String, String, Object> condition){
             builder.sql.append(" ");
             builder.sql.append("IS");
             builder.sql.append(" ");
-            builder.sql.append(condition);
+            builder.sql.append(condition.getKey());
+            if(condition.hasValue1()){
+                builder.sql.append("=");
+            }
+            if(condition.hasValue2()){
+                builder.sql.append("?");
+                builder.sql_values.add(condition.getValue2());
+            }
             return this;
         }
 
-        public UPDATE IN(String condition){
+        public UPDATE IN(TripleMap.TripleEntry<String, String, Object> condition){
             builder.sql.append(" ");
             builder.sql.append("IN");
             builder.sql.append(" ");
-            builder.sql.append(condition);
+            builder.sql.append(condition.getKey());
+            if(condition.hasValue1()){
+                builder.sql.append("=");
+            }
+            if(condition.hasValue2()){
+                builder.sql.append("?");
+                builder.sql_values.add(condition.getValue2());
+            }
             return this;
         }
 
@@ -262,7 +382,10 @@ public class SQLBuilder {
             builder.sql.append(" ");
             builder.sql.append("VALUES");
             builder.sql.append("(");
-            builder.sql.append(Arrays.stream(values).map(Object::toString).collect(Collectors.joining(", ")));
+            builder.sql.append(Arrays.stream(values).map(o-> {
+                builder.sql_values.add(o);
+                return "?";
+            }).collect(Collectors.joining(", ")));
             builder.sql.append(")");
             return this;
         }
@@ -293,67 +416,123 @@ public class SQLBuilder {
             return this;
         }
 
-        public SELECT WHERE(String condition){
+        public SELECT WHERE(TripleMap.TripleEntry<String, String, Object> condition){
             builder.sql.append(" ");
             builder.sql.append("WHERE");
             builder.sql.append(" ");
-            builder.sql.append(condition);
+            builder.sql.append(condition.getKey());
+            if(condition.hasValue1()){
+                builder.sql.append("=");
+            }
+            if(condition.hasValue2()){
+                builder.sql.append("?");
+                builder.sql_values.add(condition.getValue2());
+            }
             return this;
         }
 
-        public SELECT AND(String condition){
+        public SELECT AND(TripleMap.TripleEntry<String, String, Object> condition){
             builder.sql.append(" ");
             builder.sql.append("AND");
             builder.sql.append(" ");
-            builder.sql.append(condition);
+            builder.sql.append(condition.getKey());
+            if(condition.hasValue1()){
+                builder.sql.append("=");
+            }
+            if(condition.hasValue2()){
+                builder.sql.append("?");
+                builder.sql_values.add(condition.getValue2());
+            }
             return this;
         }
 
-        public SELECT OR(String condition){
+        public SELECT OR(TripleMap.TripleEntry<String, String, Object> condition){
             builder.sql.append(" ");
             builder.sql.append("OR");
             builder.sql.append(" ");
-            builder.sql.append(condition);
+            builder.sql.append(condition.getKey());
+            if(condition.hasValue1()){
+                builder.sql.append("=");
+            }
+            if(condition.hasValue2()){
+                builder.sql.append("?");
+                builder.sql_values.add(condition.getValue2());
+            }
             return this;
         }
 
-        public SELECT NOT(String condition){
+        public SELECT NOT(TripleMap.TripleEntry<String, String, Object> condition){
             builder.sql.append(" ");
             builder.sql.append("NOT");
             builder.sql.append(" ");
-            builder.sql.append(condition);
+            builder.sql.append(condition.getKey());
+            if(condition.hasValue1()){
+                builder.sql.append("=");
+            }
+            if(condition.hasValue2()){
+                builder.sql.append("?");
+                builder.sql_values.add(condition.getValue2());
+            }
             return this;
         }
 
-        public SELECT NOT_LIKE(String condition){
+        public SELECT NOT_LIKE(TripleMap.TripleEntry<String, String, Object> condition){
             builder.sql.append(" ");
             builder.sql.append("NOT LIKE");
             builder.sql.append(" ");
-            builder.sql.append(condition);
+            builder.sql.append(condition.getKey());
+            if(condition.hasValue1()){
+                builder.sql.append("=");
+            }
+            if(condition.hasValue2()){
+                builder.sql.append("?");
+                builder.sql_values.add(condition.getValue2());
+            }
             return this;
         }
 
-        public SELECT BETWEEN(String condition){
+        public SELECT BETWEEN(TripleMap.TripleEntry<String, String, Object> condition){
             builder.sql.append(" ");
             builder.sql.append("BETWEEN");
             builder.sql.append(" ");
-            builder.sql.append(condition);
+            builder.sql.append(condition.getKey());
+            if(condition.hasValue1()){
+                builder.sql.append("=");
+            }
+            if(condition.hasValue2()){
+                builder.sql.append("?");
+                builder.sql_values.add(condition.getValue2());
+            }
             return this;
         }
 
-        public SELECT IS(String condition){
+        public SELECT IS(TripleMap.TripleEntry<String, String, Object> condition){
             builder.sql.append(" ");
             builder.sql.append("IS");
             builder.sql.append(" ");
-            builder.sql.append(condition);
+            builder.sql.append(condition.getKey());
+            if(condition.hasValue1()){
+                builder.sql.append("=");
+            }
+            if(condition.hasValue2()){
+                builder.sql.append("?");
+                builder.sql_values.add(condition.getValue2());
+            }
             return this;
         }
 
-        public SELECT IN(String condition){
+        public SELECT IN(TripleMap.TripleEntry<String, String, Object> condition){
             builder.sql.append(" ");
             builder.sql.append("IN");
             builder.sql.append(" ");
-            builder.sql.append(condition);
+            builder.sql.append(condition.getKey());
+            if(condition.hasValue1()){
+                builder.sql.append("=");
+            }
+            if(condition.hasValue2()){
+                builder.sql.append("?");
+                builder.sql_values.add(condition.getValue2());
+            }
             return this;
         }
 
