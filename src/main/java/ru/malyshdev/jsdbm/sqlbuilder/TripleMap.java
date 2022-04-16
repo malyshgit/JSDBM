@@ -26,6 +26,10 @@ public class TripleMap<X,Y,Z> {
         return tm;
     }
 
+    public static <X,Y,Z> TripleEntry<X, Y, Z> entry(X x, Y y, Z z){
+        return new TripleEntry<>(x,y,z);
+    }
+
     public void put(X key, Y value1, Z value2){
         entryList.add(new TripleEntry<>(key, value1, value2));
     }
