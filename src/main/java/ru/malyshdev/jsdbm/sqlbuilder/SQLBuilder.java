@@ -730,6 +730,7 @@ public class SQLBuilder {
                 var value = sql_values.get(i-1);
                 preparedStatement.setObject(i, value);
             }
+            System.out.println(preparedStatement.toString());
             return preparedStatement.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -744,6 +745,7 @@ public class SQLBuilder {
                 var value = sql_values.get(i-1);
                 preparedStatement.setObject(i, value);
             }
+            System.out.println(preparedStatement.toString());
             return preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
