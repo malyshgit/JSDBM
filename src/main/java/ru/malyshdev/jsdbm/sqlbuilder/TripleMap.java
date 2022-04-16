@@ -20,6 +20,12 @@ public class TripleMap<X,Y,Z> {
         return tm;
     }
 
+    public static <X,Y,Z> TripleMap<X, Y, Z> of(X x, Y y, Z z){
+        var tm = new TripleMap<X, Y, Z>();
+        tm.put(x, y, z);
+        return tm;
+    }
+
     public void put(X key, Y value1, Z value2){
         entryList.add(new TripleEntry<>(key, value1, value2));
     }
