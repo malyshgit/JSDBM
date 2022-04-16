@@ -56,11 +56,13 @@ public class SQLBuilder {
             builder.sql.append("WHERE");
             builder.sql.append(" ");
             builder.sql.append(condition.getKey());
+            builder.sql.append("=");
             if(condition.hasValue1()){
-                builder.sql.append("=");
+                builder.sql.append(condition.getValue1());
+            }else{
+                builder.sql.append("?");
             }
             if(condition.hasValue2()){
-                builder.sql.append("?");
                 builder.sql_values.add(condition.getValue2());
             }
             return this;
@@ -71,11 +73,13 @@ public class SQLBuilder {
             builder.sql.append("AND");
             builder.sql.append(" ");
             builder.sql.append(condition.getKey());
+            builder.sql.append("=");
             if(condition.hasValue1()){
-                builder.sql.append("=");
+                builder.sql.append(condition.getValue1());
+            }else{
+                builder.sql.append("?");
             }
             if(condition.hasValue2()){
-                builder.sql.append("?");
                 builder.sql_values.add(condition.getValue2());
             }
             return this;
@@ -86,11 +90,13 @@ public class SQLBuilder {
             builder.sql.append("OR");
             builder.sql.append(" ");
             builder.sql.append(condition.getKey());
+            builder.sql.append("=");
             if(condition.hasValue1()){
-                builder.sql.append("=");
+                builder.sql.append(condition.getValue1());
+            }else{
+                builder.sql.append("?");
             }
             if(condition.hasValue2()){
-                builder.sql.append("?");
                 builder.sql_values.add(condition.getValue2());
             }
             return this;
@@ -101,11 +107,13 @@ public class SQLBuilder {
             builder.sql.append("NOT");
             builder.sql.append(" ");
             builder.sql.append(condition.getKey());
+            builder.sql.append("=");
             if(condition.hasValue1()){
-                builder.sql.append("=");
+                builder.sql.append(condition.getValue1());
+            }else{
+                builder.sql.append("?");
             }
             if(condition.hasValue2()){
-                builder.sql.append("?");
                 builder.sql_values.add(condition.getValue2());
             }
             return this;
@@ -116,11 +124,13 @@ public class SQLBuilder {
             builder.sql.append("NOT LIKE");
             builder.sql.append(" ");
             builder.sql.append(condition.getKey());
+            builder.sql.append("=");
             if(condition.hasValue1()){
-                builder.sql.append("=");
+                builder.sql.append(condition.getValue1());
+            }else{
+                builder.sql.append("?");
             }
             if(condition.hasValue2()){
-                builder.sql.append("?");
                 builder.sql_values.add(condition.getValue2());
             }
             return this;
@@ -131,11 +141,13 @@ public class SQLBuilder {
             builder.sql.append("BETWEEN");
             builder.sql.append(" ");
             builder.sql.append(condition.getKey());
+            builder.sql.append("=");
             if(condition.hasValue1()){
-                builder.sql.append("=");
+                builder.sql.append(condition.getValue1());
+            }else{
+                builder.sql.append("?");
             }
             if(condition.hasValue2()){
-                builder.sql.append("?");
                 builder.sql_values.add(condition.getValue2());
             }
             return this;
@@ -146,11 +158,13 @@ public class SQLBuilder {
             builder.sql.append("IS");
             builder.sql.append(" ");
             builder.sql.append(condition.getKey());
+            builder.sql.append("=");
             if(condition.hasValue1()){
-                builder.sql.append("=");
+                builder.sql.append(condition.getValue1());
+            }else{
+                builder.sql.append("?");
             }
             if(condition.hasValue2()){
-                builder.sql.append("?");
                 builder.sql_values.add(condition.getValue2());
             }
             return this;
@@ -161,11 +175,13 @@ public class SQLBuilder {
             builder.sql.append("IN");
             builder.sql.append(" ");
             builder.sql.append(condition.getKey());
+            builder.sql.append("=");
             if(condition.hasValue1()){
-                builder.sql.append("=");
+                builder.sql.append(condition.getValue1());
+            }else{
+                builder.sql.append("?");
             }
             if(condition.hasValue2()){
-                builder.sql.append("?");
                 builder.sql_values.add(condition.getValue2());
             }
             return this;
@@ -213,11 +229,13 @@ public class SQLBuilder {
             builder.sql.append(" ");
             for(var cv : columns_and_values.getEntryList()){
                 builder.sql.append(cv.getKey());
+                builder.sql.append("=");
                 if(cv.hasValue1()){
-                    builder.sql.append("=");
+                    builder.sql.append(cv.getValue1());
+                }else{
+                    builder.sql.append("?");
                 }
                 if(cv.hasValue2()){
-                    builder.sql.append("?");
                     builder.sql_values.add(cv.getValue2());
                 }
             };
@@ -229,11 +247,13 @@ public class SQLBuilder {
             builder.sql.append("WHERE");
             builder.sql.append(" ");
             builder.sql.append(condition.getKey());
+            builder.sql.append("=");
             if(condition.hasValue1()){
-                builder.sql.append("=");
+                builder.sql.append(condition.getValue1());
+            }else{
+                builder.sql.append("?");
             }
             if(condition.hasValue2()){
-                builder.sql.append("?");
                 builder.sql_values.add(condition.getValue2());
             }
             return this;
@@ -244,11 +264,13 @@ public class SQLBuilder {
             builder.sql.append("AND");
             builder.sql.append(" ");
             builder.sql.append(condition.getKey());
+            builder.sql.append("=");
             if(condition.hasValue1()){
-                builder.sql.append("=");
+                builder.sql.append(condition.getValue1());
+            }else{
+                builder.sql.append("?");
             }
             if(condition.hasValue2()){
-                builder.sql.append("?");
                 builder.sql_values.add(condition.getValue2());
             }
             return this;
@@ -259,11 +281,13 @@ public class SQLBuilder {
             builder.sql.append("OR");
             builder.sql.append(" ");
             builder.sql.append(condition.getKey());
+            builder.sql.append("=");
             if(condition.hasValue1()){
-                builder.sql.append("=");
+                builder.sql.append(condition.getValue1());
+            }else{
+                builder.sql.append("?");
             }
             if(condition.hasValue2()){
-                builder.sql.append("?");
                 builder.sql_values.add(condition.getValue2());
             }
             return this;
@@ -274,11 +298,13 @@ public class SQLBuilder {
             builder.sql.append("NOT");
             builder.sql.append(" ");
             builder.sql.append(condition.getKey());
+            builder.sql.append("=");
             if(condition.hasValue1()){
-                builder.sql.append("=");
+                builder.sql.append(condition.getValue1());
+            }else{
+                builder.sql.append("?");
             }
             if(condition.hasValue2()){
-                builder.sql.append("?");
                 builder.sql_values.add(condition.getValue2());
             }
             return this;
@@ -289,11 +315,13 @@ public class SQLBuilder {
             builder.sql.append("NOT LIKE");
             builder.sql.append(" ");
             builder.sql.append(condition.getKey());
+            builder.sql.append("=");
             if(condition.hasValue1()){
-                builder.sql.append("=");
+                builder.sql.append(condition.getValue1());
+            }else{
+                builder.sql.append("?");
             }
             if(condition.hasValue2()){
-                builder.sql.append("?");
                 builder.sql_values.add(condition.getValue2());
             }
             return this;
@@ -304,11 +332,13 @@ public class SQLBuilder {
             builder.sql.append("BETWEEN");
             builder.sql.append(" ");
             builder.sql.append(condition.getKey());
+            builder.sql.append("=");
             if(condition.hasValue1()){
-                builder.sql.append("=");
+                builder.sql.append(condition.getValue1());
+            }else{
+                builder.sql.append("?");
             }
             if(condition.hasValue2()){
-                builder.sql.append("?");
                 builder.sql_values.add(condition.getValue2());
             }
             return this;
@@ -319,11 +349,13 @@ public class SQLBuilder {
             builder.sql.append("IS");
             builder.sql.append(" ");
             builder.sql.append(condition.getKey());
+            builder.sql.append("=");
             if(condition.hasValue1()){
-                builder.sql.append("=");
+                builder.sql.append(condition.getValue1());
+            }else{
+                builder.sql.append("?");
             }
             if(condition.hasValue2()){
-                builder.sql.append("?");
                 builder.sql_values.add(condition.getValue2());
             }
             return this;
@@ -334,11 +366,13 @@ public class SQLBuilder {
             builder.sql.append("IN");
             builder.sql.append(" ");
             builder.sql.append(condition.getKey());
+            builder.sql.append("=");
             if(condition.hasValue1()){
-                builder.sql.append("=");
+                builder.sql.append(condition.getValue1());
+            }else{
+                builder.sql.append("?");
             }
             if(condition.hasValue2()){
-                builder.sql.append("?");
                 builder.sql_values.add(condition.getValue2());
             }
             return this;
@@ -421,11 +455,13 @@ public class SQLBuilder {
             builder.sql.append("WHERE");
             builder.sql.append(" ");
             builder.sql.append(condition.getKey());
+            builder.sql.append("=");
             if(condition.hasValue1()){
-                builder.sql.append("=");
+                builder.sql.append(condition.getValue1());
+            }else{
+                builder.sql.append("?");
             }
             if(condition.hasValue2()){
-                builder.sql.append("?");
                 builder.sql_values.add(condition.getValue2());
             }
             return this;
@@ -436,11 +472,13 @@ public class SQLBuilder {
             builder.sql.append("AND");
             builder.sql.append(" ");
             builder.sql.append(condition.getKey());
+            builder.sql.append("=");
             if(condition.hasValue1()){
-                builder.sql.append("=");
+                builder.sql.append(condition.getValue1());
+            }else{
+                builder.sql.append("?");
             }
             if(condition.hasValue2()){
-                builder.sql.append("?");
                 builder.sql_values.add(condition.getValue2());
             }
             return this;
@@ -451,11 +489,13 @@ public class SQLBuilder {
             builder.sql.append("OR");
             builder.sql.append(" ");
             builder.sql.append(condition.getKey());
+            builder.sql.append("=");
             if(condition.hasValue1()){
-                builder.sql.append("=");
+                builder.sql.append(condition.getValue1());
+            }else{
+                builder.sql.append("?");
             }
             if(condition.hasValue2()){
-                builder.sql.append("?");
                 builder.sql_values.add(condition.getValue2());
             }
             return this;
@@ -466,11 +506,13 @@ public class SQLBuilder {
             builder.sql.append("NOT");
             builder.sql.append(" ");
             builder.sql.append(condition.getKey());
+            builder.sql.append("=");
             if(condition.hasValue1()){
-                builder.sql.append("=");
+                builder.sql.append(condition.getValue1());
+            }else{
+                builder.sql.append("?");
             }
             if(condition.hasValue2()){
-                builder.sql.append("?");
                 builder.sql_values.add(condition.getValue2());
             }
             return this;
@@ -481,11 +523,13 @@ public class SQLBuilder {
             builder.sql.append("NOT LIKE");
             builder.sql.append(" ");
             builder.sql.append(condition.getKey());
+            builder.sql.append("=");
             if(condition.hasValue1()){
-                builder.sql.append("=");
+                builder.sql.append(condition.getValue1());
+            }else{
+                builder.sql.append("?");
             }
             if(condition.hasValue2()){
-                builder.sql.append("?");
                 builder.sql_values.add(condition.getValue2());
             }
             return this;
@@ -496,11 +540,13 @@ public class SQLBuilder {
             builder.sql.append("BETWEEN");
             builder.sql.append(" ");
             builder.sql.append(condition.getKey());
+            builder.sql.append("=");
             if(condition.hasValue1()){
-                builder.sql.append("=");
+                builder.sql.append(condition.getValue1());
+            }else{
+                builder.sql.append("?");
             }
             if(condition.hasValue2()){
-                builder.sql.append("?");
                 builder.sql_values.add(condition.getValue2());
             }
             return this;
@@ -511,11 +557,13 @@ public class SQLBuilder {
             builder.sql.append("IS");
             builder.sql.append(" ");
             builder.sql.append(condition.getKey());
+            builder.sql.append("=");
             if(condition.hasValue1()){
-                builder.sql.append("=");
+                builder.sql.append(condition.getValue1());
+            }else{
+                builder.sql.append("?");
             }
             if(condition.hasValue2()){
-                builder.sql.append("?");
                 builder.sql_values.add(condition.getValue2());
             }
             return this;
@@ -526,11 +574,13 @@ public class SQLBuilder {
             builder.sql.append("IN");
             builder.sql.append(" ");
             builder.sql.append(condition.getKey());
+            builder.sql.append("=");
             if(condition.hasValue1()){
-                builder.sql.append("=");
+                builder.sql.append(condition.getValue1());
+            }else{
+                builder.sql.append("?");
             }
             if(condition.hasValue2()){
-                builder.sql.append("?");
                 builder.sql_values.add(condition.getValue2());
             }
             return this;
@@ -628,6 +678,10 @@ public class SQLBuilder {
     public ResultSet executeQuery(Connection connection){
         try {
             var preparedStatement = connection.prepareStatement(sql.toString());
+            for(var i = 1; i <= sql_values.size(); i++){
+                var value = sql_values.get(i-1);
+                preparedStatement.setObject(i, value);
+            }
             return preparedStatement.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -638,6 +692,10 @@ public class SQLBuilder {
     public Integer executeUpdate(Connection connection){
         try {
             var preparedStatement = connection.prepareStatement(sql.toString());
+            for(var i = 1; i <= sql_values.size(); i++){
+                var value = sql_values.get(i-1);
+                preparedStatement.setObject(i, value);
+            }
             return preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -647,7 +705,7 @@ public class SQLBuilder {
 
 
     public String getSqlQuery(){
-        return sql.toString();
+        return sql.toString().replaceAll("\\?", "%s").formatted(sql_values.stream().map(Object::toString).toList());
     }
 
 }
